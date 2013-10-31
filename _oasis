@@ -1,0 +1,21 @@
+OASISFormat: 0.3
+Name:        opam2debian
+Version:     0.1.0
+Synopsis:    Create Debian package that contains a set of OPAM packages.
+Authors:     Sylvain Le Gal
+License:     LGPL-2.1 with OCaml linking exception
+Plugins:     DevFiles (0.3), META (0.3), StdFiles (0.3)
+BuildTools:  ocamlbuild
+
+Executable opam2debian
+  Path:       src/bin
+  MainIs:     opam2debian.ml
+
+Executable test
+  Path:       test
+  MainIs:     test.ml
+  BuildDepends: oUnit (>= 2.0.0)
+
+Test main
+  Command: $test
+  TestTools: test, opam2debian
