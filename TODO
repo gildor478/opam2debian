@@ -1,0 +1,15 @@
+
+in .profile:
+
+# OPAM configuration
+. /opt/opam/le-gall.net-4.01/opam-init/init.sh > /dev/null 2> /dev/null || true
+
+le-gall.net-4.01/opam-init/init.sh
+
+in .ocamlinit
+(* Added by OPAM. *)
+let () =
+  try Topdirs.dir_directory (Sys.getenv "OCAML_TOPLEVEL_PATH")
+  with Not_found -> ()
+;;
+
