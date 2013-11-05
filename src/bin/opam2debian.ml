@@ -68,6 +68,15 @@ let distribution_default =
 let version_default =
   CalendarLib.Printer.Calendar.sprint "%Y%m%d" (CalendarLib.Calendar.now ())
 
+let system_compiler_version () =
+  let chn = Unix.open_process_in "ocamlc -version" in
+  let version = input_line chn in
+    match Unix.close_process_in chn with
+      | Unix.WEXITED 0 -> version
+      | _ ->
+          failwith
+            "Unable to guess ocaml system version (using 'ocamlc -version')."
+
 type create_data =
     {
       compiler: string;
@@ -102,7 +111,9 @@ let create conf data =
     in
     let package_depends =
       if data.compiler = system_compiler then
-        SetString.add "ocaml-nox-${F:OCamlABI}" package_depends
+        SetString.add
+          ("ocaml-nox-"^(system_compiler_version ()))
+          package_depends
       else
         package_depends
     in
@@ -113,6 +124,7 @@ let create conf data =
     CalendarLib.Printer.Calendar.sprint "%a, %d %b %Y %T %z"
       (CalendarLib.Calendar.now ())
   in
+
 
   let topdir = conf.name in
 
@@ -148,8 +160,23 @@ let create conf data =
     gen ["debian"; "dirs"] Data.debian_dirs;
     gen ["debian"; "lintian-overrides"] Data.debian_lintian_overrides;
     gen ~exec:true ["debian"; "rules"] Data.debian_rules;
-    gen ["debian"; "source"; "format"] Data.debian_source_format
-
+    gen ["debian"; "source"; "format"] Data.debian_source_format;
+    begin
+      let command =
+        if data.build then
+          Printf.sprintf "cd %s && debuild --no-lintian -uc -us" topdir
+        else
+          Printf.sprintf "dpkg-source -b %s" topdir
+      in
+        match Sys.command command with
+          | 0 -> ()
+          | n ->
+              failwith
+                (Printf.sprintf
+                   "Command '%s' exited with code %d."
+                   command n)
+    end;
+    FileUtil.rm ~recurse:true [topdir]
 
 let init_env conf =
   print_endline "init_env"

@@ -3,3 +3,5 @@
 %:
 	dh --with ocaml $@
 
+override_dh_ocaml:
+	dh_strip -X/opt/opam2debian

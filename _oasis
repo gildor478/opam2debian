@@ -20,7 +20,8 @@ Executable opam2debian
                 calendar (>= 2.03),
                 logger,
                 jingoo (>= 1.2.0),
-                threads
+                threads,
+                unix
 
 Executable test
   Path:       test
