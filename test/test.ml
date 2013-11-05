@@ -8,7 +8,8 @@ let simple =
   (fun test_ctxt ->
      let tmpdir = bracket_tmpdir test_ctxt in
        assert_command ~ctxt:test_ctxt ~chdir:tmpdir
-         (opam2debian test_ctxt) [];
+         (opam2debian test_ctxt)
+         ["create"; "--name"; "opam2debian-test"; "--verbose"; "ounit"];
        (* TODO: test the result: list files in the debian archive. *)
   )
 

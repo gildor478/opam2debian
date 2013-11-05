@@ -1,8 +1,10 @@
 
 # OCaml specific (vcs-setup.sh).
-^setup.log$
-^setup.data$
-^_build$
-^dist($|/)
+setup.log
+setup.data
+_build
+dist
+*.byte
 
 # Customization
+tmp

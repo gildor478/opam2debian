@@ -1,0 +1,9 @@
+Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+
+Files: *
+Copyright: Copyright (c) 2012 Sylvain Le Gall
+License: GPL-3+
+
+ See '/usr/share/common-licenses/GPL-3' for the full text.
+
+# TODO: all sub packages licenses.

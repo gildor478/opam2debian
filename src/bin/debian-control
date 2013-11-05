@@ -1,0 +1,23 @@
+Source: {{name}}
+Section: ocaml
+Priority: optional
+Maintainer: {{maintainer}}
+Build-Depends: debhelper (>= 7.0.50~),
+{% for deps in extra_build_depends %} {{deps}}, 
+{% endfor %} opam,
+ proot
+Standards-Version: 3.9.1
+{% if homepage != "" %}
+Homepage: {{homepage}}
+{% endif %}
+
+Package: {{name}}
+Architecture: any
+Depends: ${misc:Depends}, ${shlibs:Depends}{% for deps in extra_depends %}, {{deps}}{% endfor %}
+Description: Pre-built OPAM packages
+ This package contains a list of prebuilt OPAM packages ready to be installed
+ without recompilation.
+ .
+ The list of included packages is:
+{% for package in package_list %} * {{package}}
+{% endfor %}

@@ -1,0 +1,2 @@
+opam2debian-test: hardening-no-relro *
+opam2debian-test: hardening-no-fortify-functions *

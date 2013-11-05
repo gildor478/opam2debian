@@ -1,0 +1,7 @@
+{{name}} ({{version}}) {{distribution}}; urgency=low
+
+  * OPAM snapshot with the following packages:
+{% for package in package_list %}    * {{package}}
+{% endfor %}
+
+ -- {{maintainer}}  {{date_rfc_2822}}

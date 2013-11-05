@@ -7,14 +7,26 @@ License:     LGPL-2.1 with OCaml linking exception
 Plugins:     DevFiles (0.3), META (0.3), StdFiles (0.3)
 BuildTools:  ocamlbuild
 
+Library logger
+  Path: src/lib/logger
+  Modules: Logger, LoggerStd
+  BuildDepends: cmdliner (>= 0.9.3)
+
 Executable opam2debian
-  Path:       src/bin
-  MainIs:     opam2debian.ml
+  Path:        src/bin
+  MainIs:      opam2debian.ml
+  BuildDepends: cmdliner (>= 0.9.3),
+                fileutils,
+                calendar (>= 2.03),
+                logger,
+                jingoo (>= 1.2.0),
+                threads
 
 Executable test
   Path:       test
   MainIs:     test.ml
   BuildDepends: oUnit (>= 2.0.0)
+  BuildTools+: ocamlify
 
 Test main
   Command: $test
