@@ -86,6 +86,7 @@ type create_data =
       homepage: string;
       distribution: string;
       version: string;
+      keep_build_dir: bool;
     }
 
 let create conf data =
@@ -176,7 +177,11 @@ let create conf data =
                    "Command '%s' exited with code %d."
                    command n)
     end;
-    FileUtil.rm ~recurse:true [topdir]
+    if not data.keep_build_dir then
+      match Sys.command ("rm -rf '"^topdir^"'") with
+        | 0 -> ()
+        | _ -> failwith (Printf.sprintf "Unable to remove '%s'." topdir)
+(*       FileUtil.rm ~recurse:true [topdir] *)
 
 let init_env conf =
   print_endline "init_env"
@@ -233,6 +238,11 @@ let create_cmd =
     Arg.(value & opt string version_default &
            info ["version"] ~doc)
   in
+  let keep_build_dir =
+    let doc = "Keep the build directory as is." in
+    Arg.(value & opt bool false &
+           info ["keep-build-dir"] ~doc)
+  in
   let package_list =
     Arg.(value & (pos_all string) [] & info [] ~docv:"PKG")
   in
@@ -243,15 +253,16 @@ let create_cmd =
          OPAM packages should be built by default."]
   in
   let f conf compiler package_list build maintainer homepage
-        distribution version =
+        distribution version keep_build_dir =
     create conf
       {compiler; package_list; build; maintainer; homepage;
-       distribution; version}
+       distribution; version; keep_build_dir}
   in
   Term.(pure f $ copts_t $ compiler $ package_list $ build $ maintainer
-          $ homepage $ distribution $ version),
+          $ homepage $ distribution $ version $ keep_build_dir),
   Term.info "create" ~sdocs:copts_sect ~doc ~man
 
+(*
 let init_env_cmd =
   let doc =
     "setup the environment to use the given opam2debian generated package."
@@ -264,12 +275,13 @@ let init_env_cmd =
   in
     Term.(pure init_env $ copts_t),
     Term.info "init-env" ~sdocs:copts_sect ~doc ~man
+ *)
 
 let default_cmd =
   Term.(ret (pure (fun _ -> `Help (`Pager, None)) $ copts_t)),
   Term.info "opam2debian" ~version:"TODO"
 
 let () =
-  match Term.eval_choice default_cmd [create_cmd; init_env_cmd] with
+  match Term.eval_choice default_cmd [create_cmd] with
     | `Error _ -> exit 1
     | _ -> ()

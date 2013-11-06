@@ -4,4 +4,7 @@
 	dh --with ocaml $@
 
 override_dh_ocaml:
+	dh_ocaml -X/opt/opam2debian
+
+override_dh_strip:
 	dh_strip -X/opt/opam2debian
