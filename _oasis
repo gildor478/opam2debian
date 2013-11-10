@@ -1,6 +1,6 @@
 OASISFormat: 0.3
 Name:        opam2debian
-Version:     0.1.0
+Version: 0.1.1
 Synopsis:    Create Debian package that contains a set of OPAM packages.
 Authors:     Sylvain Le Gal
 License:     LGPL-2.1 with OCaml linking exception
