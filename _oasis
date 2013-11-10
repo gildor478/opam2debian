@@ -31,4 +31,4 @@ Executable test
 
 Test main
   Command: $test
-  TestTools: test, opam2debian
+  TestTools: test, opam2debian, proot, opam
